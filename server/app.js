@@ -12,15 +12,24 @@ app.use(express.urlencoded({ extended: true }));
 
 app.use(express.static(path.join(__dirname, '../dist')))
 
+//Test Route
 app.get("/test", (req, res, next) => {
   res.send("Test route");
 });
+
+
+// TODO: Add your routers here
+
+// Backend Routes
+app.use("/auth", require("./auth"));
+app.use("/api", require("./api"));
+
 
 app.get('/', (req, res, next) => {
   res.sendFile(path.join(__dirname, '../dist/index.html'));
 })
 
-// TODO: Add your routers here
+
 
 // Error handling middleware
 app.use((error, req, res, next) => {
