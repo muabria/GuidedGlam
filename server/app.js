@@ -1,6 +1,8 @@
 const path = require("path");
 const express = require("express");
 const morgan = require("morgan");
+const { authMiddleware } = require("./auth/utils");
+
 const app = express();
 
 // Logging middleware
@@ -10,31 +12,28 @@ app.use(morgan("dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-app.use(express.static(path.join(__dirname, '../dist')))
+// app.use(express.static(path.join(__dirname, '../dist')))
 
-//Test Route
+//Authorization middleware (in ./auth/utils)
+app.use(authMiddleware);
+
+//Test route
 app.get("/test", (req, res, next) => {
-  res.send("Test route");
+    res.send("Test route");
 });
 
-
-// TODO: Add your routers here
-
-// Backend Routes
+// Backend routes
 app.use("/auth", require("./auth"));
 app.use("/api", require("./api"));
 
-
-app.get('/', (req, res, next) => {
-  res.sendFile(path.join(__dirname, '../dist/index.html'));
-})
-
-
+// app.get('*', (req, res, next) => {
+//     res.sendFile(path.join(__dirname, '../dist/index.html'));
+// })
 
 // Error handling middleware
 app.use((error, req, res, next) => {
     console.error('SERVER ERROR: ', error);
-    if(res.statusCode < 400) {
+    if (res.statusCode < 400) {
         res.status(500);
     }
     res.send({
@@ -46,12 +45,12 @@ app.use((error, req, res, next) => {
 });
 
 // 404 handler
-app.get('*', (req, res) => {
-    res.status(404).send({
-        error: '404 - Not Found',
-        message: 'No route found for the requested URL',
-    });
-});
-  
+// app.get('*', (req, res) => {
+//     res.status(404).send({
+//         error: '404 - Not Found',
+//         message: 'No route found for the requested URL',
+//     });
+// });
+
 
 module.exports = app;

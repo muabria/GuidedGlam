@@ -8,10 +8,50 @@ const apiRouter = express.Router();
 const { PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient();
 
+async function main() {
+    // ... you will write your Prisma Client queries here
+  }
+  
+  main()
+    .then(async () => {
+      await prisma.$disconnect()
+    })
+    .catch(async (e) => {
+      console.error(e)
+      await prisma.$disconnect()
+      process.exit(1)
+    })
 
-// <------------------------ HOMEPAGE ------------------------>
 
-// <------------------------ FACE SHAPE ------------------------>
+//<--------------------------------GET ALL FACESHAPES-------------------------------->
+
+//GET /api/FaceShape
+apiRouter.get("/faceshape", async (req, res, next) => {
+    try {
+        const FaceShape = await prisma.FaceShape.findMany();
+        res.send(FaceShape);
+    } catch (error) {
+        next(error);
+    }
+});
+//<--------------------------------FACE SHAPES-------------------------------->
+//GET /api/FaceShape/:id
+apiRouter.get("/faceshape/:id", async (req, res, next) => {
+    try {
+        const SingleFaceShape = await prisma.SingleFaceShape.findUnique({
+            where: {
+                id: Number(req.params.id)
+            },
+        });
+
+        res.send(SingleFaceShape);
+    } catch (error) {
+        next(error);
+    }
+});
+
+
+
 
 // <------------------------ SKIN TONES ------------------------>
 

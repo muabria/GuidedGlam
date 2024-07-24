@@ -1,14 +1,57 @@
 // TODO: seed the DB using Prisma
 const prisma = require("./client");
 
-// <------------------------ HOMEPAGE ------------------------>
+async function seed() {
+    console.log("Seeding the database.");
+    await prisma.comment.deleteMany();
+    await prisma.post.deleteMany();
+    await prisma.user.deleteMany();
+    await prisma.equipment.deleteMany();
+    await prisma.category.deleteMany();
+
+
+    // <------------------------ HOMEPAGE ------------------------>
+
+    //<-------------------------------- CATEGORIES -------------------------------->
+
+    try {
+        const FaceShape = await prisma.category.create({
+            data: {
+                category: "Face Shapes"
+            }
+        })
+
+        const SkinTones = await prisma.category.create({
+            data: {
+                category: "Skin Tones"
+            }
+        })
+
+        const SkinTypes = await prisma.category.create({
+            data: {
+                category: "Skin Types"
+            }
+        })
+
+    }
 
 
 // <------------------------ FACE SHAPE ------------------------>
 
 
 
-    // <---- DIAMOND ---->
+    // // <---- DIAMOND ---->
+    // const Diamond = await prisma.equipment.create({
+    //     data: {
+    //         name: "",
+    //         description: "",
+    //         image: "",
+    //         category: { connect: { id: Diamond.id } },
+            
+    //     },
+    //     include: { category: true }
+    // })
+
 
     // <---- HEART ---->
 
@@ -48,7 +91,11 @@ const prisma = require("./client");
     // <---- SKIN TONE: DARK DEEP ---->
         
     // <---- SKIN TONE: DEEP ---->
-
+    
+    catch (error) {
+        console.error(error);
+    }
+}
     seed().then(async () => {
         await prisma.$disconnect();
     }).catch(async (e) => {
@@ -59,4 +106,4 @@ const prisma = require("./client");
 
 
 
-
+    
