@@ -29,24 +29,22 @@ model Post {
     rating Int
     user User @relation(fields: [userId], references: [id], onDelete: Cascade)
     userId Int
-    equipment Equipment @relation(fields: [equipmentId], references: [id], onDelete: Cascade)
-    equipmentId Int
     comments Comment[]
-    @@unique([userId, equipmentId])
+    @@unique([userId])
 }
 
-model Equipment {
-    id Int @id @default(autoincrement())
-    name String @unique
-    description String
-    image String
-    posts Post[]
-    category Category @relation(fields: [categoryId], references: [id])
-    categoryId Int
-    brand String
-    purchaseLink String
-    priceRating Int
-}
+// model Equipment {
+//     id Int @id @default(autoincrement())
+//     name String @unique
+//     description String
+//     image String
+//     posts Post[]
+//     category Category @relation(fields: [categoryId], references: [id])
+//     categoryId Int
+//     brand String
+//     purchaseLink String
+//     priceRating Int
+// }
 
 model Comment {
     id Int @id @default(autoincrement())
@@ -60,5 +58,5 @@ model Comment {
 model Category {
     id Int @id @default(autoincrement())
     category String @unique
-    equipment Equipment[]
+    // equipment Equipment[]
 }
