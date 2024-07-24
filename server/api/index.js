@@ -28,7 +28,7 @@ async function main() {
 //GET /api/FaceShape
 apiRouter.get("/faceshape", async (req, res, next) => {
     try {
-        const FaceShape = await prisma.FaceShape.findMany();
+        const FaceShape = await prisma.faceShape.findMany();
         res.send(FaceShape);
     } catch (error) {
         next(error);
@@ -38,7 +38,7 @@ apiRouter.get("/faceshape", async (req, res, next) => {
 //GET /api/FaceShape/:id
 apiRouter.get("/faceshape/:id", async (req, res, next) => {
     try {
-        const SingleFaceShape = await prisma.SingleFaceShape.findUnique({
+        const SingleFaceShape = await prisma.faceShape.findUnique({
             where: {
                 id: Number(req.params.id)
             },
@@ -50,9 +50,9 @@ apiRouter.get("/faceshape/:id", async (req, res, next) => {
     }
 });
 
-
-
-
 // <------------------------ SKIN TONES ------------------------>
+
+
+// <------------------------ SKIN TYPES ------------------------>
 
 module.exports = apiRouter;

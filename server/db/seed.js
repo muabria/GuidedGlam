@@ -3,54 +3,29 @@ const prisma = require("./client");
 
 async function seed() {
     console.log("Seeding the database.");
-    await prisma.comment.deleteMany();
-    await prisma.post.deleteMany();
-    await prisma.user.deleteMany();
-    await prisma.equipment.deleteMany();
-    await prisma.category.deleteMany();
+    await prisma.faceShape.deleteMany();
+
 
 
     // <------------------------ HOMEPAGE ------------------------>
 
-    //<-------------------------------- CATEGORIES -------------------------------->
 
     try {
-        const FaceShape = await prisma.category.create({
+        const diamond = await prisma.faceShape.create({
             data: {
-                category: "Face Shapes"
+                name: "Diamond"
             }
         })
 
-        const SkinTones = await prisma.category.create({
-            data: {
-                category: "Skin Tones"
-            }
-        })
-
-        const SkinTypes = await prisma.category.create({
-            data: {
-                category: "Skin Types"
-            }
-        })
 
     }
 
 
-// <------------------------ FACE SHAPE ------------------------>
+    // <------------------------ FACE SHAPE ------------------------>
 
 
 
-    // // <---- DIAMOND ---->
-    // const Diamond = await prisma.equipment.create({
-    //     data: {
-    //         name: "",
-    //         description: "",
-    //         image: "",
-    //         category: { connect: { id: Diamond.id } },
-            
-    //     },
-    //     include: { category: true }
-    // })
+    // <---- DIAMOND ---->
 
 
     // <---- HEART ---->
@@ -60,7 +35,7 @@ async function seed() {
     // <---- OVAL ---->
 
     // <---- SQUARE ---->
-        
+
     // <---- TRIANGLE ---->
 
 
@@ -68,42 +43,46 @@ async function seed() {
 
 
 
-// <------------------------ SKIN TONE ------------------------>
+    // <------------------------ SKIN TONE ------------------------>
 
 
 
     // <---- SKIN TONE: FAIR ---->
-        
+
     // <---- SKIN TONE: LIGHT ---->
-        
+
     // <---- SKIN TONE: LIGHT MEDIUM  ---->
-        
+
     // <---- SKIN TONE: MEDIUM  ---->
-        
+
     // <---- SKIN TONE: MEDIUM TAN ---->
-        
+
     // <---- SKIN TONE: TAN ---->
-        
+
     // <---- SKIN TONE: TAN DARK ---->
-        
+
     // <---- SKIN TONE: DARK ---->
-        
+
     // <---- SKIN TONE: DARK DEEP ---->
-        
+
     // <---- SKIN TONE: DEEP ---->
-     
+
     catch (error) {
         console.error(error);
     }
+    console.log("Seeded Database.")
 }
-    seed().then(async () => {
-        await prisma.$disconnect();
-    }).catch(async (e) => {
-        console.error(e)
-        await prisma.$disconnect();
-        process.exit(1)
-    })
 
 
 
-    
+seed().then(async () => {
+    await prisma.$disconnect();
+}).catch(async (e) => {
+    console.error(e)
+    await prisma.$disconnect();
+    process.exit(1)
+})
+
+
+
+
