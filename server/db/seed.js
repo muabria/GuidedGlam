@@ -8,12 +8,114 @@ async function seed() {
 
 
     // <------------------------ HOMEPAGE ------------------------>
+    // <------------------------ FACE SHAPE ------------------------>
+
 
 
     try {
+        // <---- DIAMOND ----> 
         const diamond = await prisma.faceShape.create({
             data: {
                 name: "Diamond"
+            }
+        })
+        // <---- HEART ----> 
+
+        const heart = await prisma.faceShape.create({
+            data: {
+                name: "Heart"
+            }
+        })
+
+        const round = await prisma.faceShape.create({
+            data: {
+                name: "Round"
+            }
+        })
+        const oval = await prisma.faceShape.create({
+            data: {
+                name: "Oval"
+            }
+        })
+        const square = await prisma.faceShape.create({
+            data: {
+                name: "Square"
+            }
+        })
+        const triangle = await prisma.faceShape.create({
+            data: {
+                name: "Triangle"
+            }
+        })
+
+
+        // <------------------------ SKIN TONE ------------------------>
+
+
+        const fair = await prisma.skinTone.create({
+            data: {
+                name: "Fair"
+            }
+        })
+
+
+        const light = await prisma.skinTone.create({
+            data: {
+                name: "Light"
+            }
+        })
+
+        const lightMedium = await prisma.skinTone.create({
+            data: {
+                name: "Light Medium"
+            }
+        })
+        const medium = await prisma.skinTone.create({
+            data: {
+                name: "Medium"
+            }
+        })
+        const mediumDeep = await prisma.skinTone.create({
+            data: {
+                name: "Medium Dark"
+            }
+        })
+        const dark = await prisma.skinTone.create({
+            data: {
+                name: "Dark"
+            }
+        })
+        const darkDeep = await prisma.skinTone.create({
+            data: {
+                name: "Dark Deep"
+            }
+        })
+
+
+        // <------------------------ SKIN TONE ------------------------>
+
+
+        const dry = await prisma.skinType.create({
+            data: {
+                name: "Dry"
+            }
+        })
+
+
+        const combo = await prisma.skinType.create({
+            data: {
+                name: "Combo"
+            }
+        })
+
+        const oily = await prisma.skinType.create({
+            data: {
+                name: "Oily"
+            }
+        })
+        const sensitive = await prisma.skinType.create({
+            data: {
+                name: "Sensitive"
             }
         })
 
@@ -21,30 +123,8 @@ async function seed() {
     }
 
 
-    // <------------------------ FACE SHAPE ------------------------>
-
-
-
-    // <---- DIAMOND ---->
-
-
-    // <---- HEART ---->
-
-    // <---- ROUND ---->
-
-    // <---- OVAL ---->
-
-    // <---- SQUARE ---->
-
-    // <---- TRIANGLE ---->
-
-
-
-
-
 
     // <------------------------ SKIN TONE ------------------------>
-
 
 
     // <---- SKIN TONE: FAIR ---->
@@ -67,12 +147,28 @@ async function seed() {
 
     // <---- SKIN TONE: DEEP ---->
 
+
+
+    // <------------------------ SKIN TONE ------------------------>
+
+
+
+    // <---- SKIN TYPE: DRY ---->
+
+    // <---- SKIN TYPE: OILY ---->
+
+    // <---- SKIN TYPE: COMBO ---->
+
+    // <---- SKIN TYPE: SENSITIVE ---->
+
+
+
+
     catch (error) {
         console.error(error);
     }
     console.log("Seeded Database.")
 }
-
 
 
 seed().then(async () => {
