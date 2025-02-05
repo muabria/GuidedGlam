@@ -3,23 +3,23 @@
 const express = require('express');
 const apiRouter = express.Router();
 
-// const { requireUser, requireAdmin } = require('../auth/utils');
+const { requireUser } = require('../auth/utils');
 
 const { PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient();
 
 async function main() {
     // ... you will write your Prisma Client queries here
-  }
-  
-  main()
+}
+
+main()
     .then(async () => {
-      await prisma.$disconnect()
+        await prisma.$disconnect()
     })
     .catch(async (e) => {
-      console.error(e)
-      await prisma.$disconnect()
-      process.exit(1)
+        console.error(e)
+        await prisma.$disconnect()
+        process.exit(1)
     })
 
 
@@ -35,6 +35,7 @@ apiRouter.get("/faceshape", async (req, res, next) => {
     }
 });
 //<-------------------------------- SINGLE FACE SHAPES-------------------------------->
+
 //GET /api/FaceShape/:id
 apiRouter.get("/faceshape/:id", async (req, res, next) => {
     try {
@@ -49,6 +50,55 @@ apiRouter.get("/faceshape/:id", async (req, res, next) => {
         next(error);
     }
 });
+
+
+// POST /api/faceshape
+apiRouter.post("/faceshape", async (req, res, next) => {
+    try {
+        const { name } = req.body;
+        const newFaceShape = await prisma.faceShape.create({
+            data: {name}
+        });
+
+        res.status(201).send(newFaceShape);
+    } catch (error) {
+        next(error);
+    }
+});
+
+
+// PUT /api/faceshape/:id
+apiRouter.put("/faceshape/:id", async (req, res, next) => {
+    try {
+        const { name } = req.body;
+        const updatedFaceShape = await prisma.faceShape.update({
+            where:
+                { id: Number(req.params.id) },
+            data:
+                { name },
+        });
+        res.send(updatedFaceShape);
+    } catch (error) {
+        next(error);
+    }
+});
+
+// PATCH /api/faceshape/:id
+apiRouter.patch("/faceshape/:id", async (req, res, next) => {
+    try {
+        const { name } = req.body;
+        const updatedFaceShape = await prisma.faceShape.update({
+            where:
+                { id: Number(req.params.id) },
+            data:
+                { name },
+        });
+        res.send(updatedFaceShape);
+    } catch (error) {
+        next(error);
+    }
+});
+
 
 // <------------------------ ALL SKIN TONES ------------------------>
 //GET /api/skintone
@@ -77,6 +127,50 @@ apiRouter.get("/skintone/:id", async (req, res, next) => {
     }
 });
 
+
+// POST /api/skintone
+apiRouter.post("/skintone", async (req, res, next) => {
+    try {
+        const { name } = req.body;
+        const newSkinTone = await prisma.skinTone.create({
+            data: {name},
+        });
+        res.status(201).send(newSkinTone);
+    } catch (error) {
+        next(error);
+    }
+});
+
+// PUT /api/skintone/:id
+apiRouter.put("/skintone/:id", async (req, res, next) => {
+    try {
+        const { name } = req.body;
+        const updatedSkinTone = await prisma.skinTone.update({
+            where: { id: Number(req.params.id) },
+            data: {name},
+        });
+        res.send(updatedSkinTone);
+    } catch (error) {
+        next(error);
+    }
+});
+
+// PATCH /api/skintone/:id
+apiRouter.patch("/skintone/:id", async (req, res, next) => {
+    try {
+        const { name } = req.body;
+        const updatedSkinTone = await prisma.skinTone.update({
+            where: { id: Number(req.params.id) },
+            data: {name},
+        });
+        res.send(updatedSkinTone);
+    } catch (error) {
+        next(error);
+    }
+});
+
+
+
 // <------------------------ ALL SKIN TYPES ------------------------>
 //GET /api/skintype
 apiRouter.get("/skintype", async (req, res, next) => {
@@ -104,5 +198,65 @@ apiRouter.get("/skintype/:id", async (req, res, next) => {
         next(error);
     }
 });
+
+
+// POST /api/skintype
+apiRouter.post("/skintype", async (req, res, next) => {
+    try {
+        const { name } = req.body;
+        const newSkinType = await prisma.skinType.create({
+            data: { name },
+        });
+        res.status(201).send(newSkinType);
+    } catch (error) {
+        next(error);
+    }
+});
+
+// PUT /api/skintype/:id
+apiRouter.put("/skintype/:id", async (req, res, next) => {
+    try {
+        const { name } = req.body;
+        const updatedSkinType = await prisma.skinType.update({
+            where: { id: Number(req.params.id) },
+            data: { name },
+        });
+        res.send(updatedSkinType);
+    } catch (error) {
+        next(error);
+    }
+});
+
+// PATCH /api/skintype/:id
+apiRouter.patch("/skintype/:id", async (req, res, next) => {
+    try {
+        const { name } = req.body;
+        const updatedSkinType = await prisma.skinType.update({
+            where: { id: Number(req.params.id) },
+            data: { name },
+        });
+        res.send(updatedSkinType);
+    } catch (error) {
+        next(error);
+    }
+});
+
+
+// //<--------------------------------GET COMMENTS BY USER----------------------------->
+
+// //GET /api/:user/comments 
+// apiRouter.get("/:user/comments", requireUser, async (req, res, next) => {
+//     try {
+//         const comments = await prisma.comment.findMany({
+//             where: { userId: req.user.id },
+//             include: { user: true }
+//         });
+//         res.send(comments);
+//     } catch (error) {
+//         next(error);
+//     }
+// });
+
+
 
 module.exports = apiRouter;
