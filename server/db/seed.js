@@ -52,10 +52,11 @@ async function seed() {
                 name: "Triangle"
             }
         })
-
+        console.log("faceshapes compete");
 
         // <------------------------ SKIN TONE ------------------------>
-
+        
+        await prisma.skinTone.deleteMany();
 
         // <---- SKIN TONE: FAIR ---->
         const fair = await prisma.skinTone.create({
@@ -140,10 +141,12 @@ async function seed() {
                 name: "Deep"
             }
         })
-
+        console.log("skintypes compete");
 
 
         // <------------------------ SKIN TONE ------------------------>
+        
+        await prisma.skinType.deleteMany();
 
 
         // <---- SKIN TYPE: DRY ---->
@@ -179,9 +182,11 @@ async function seed() {
                 name: "Sensitive"
             }
         })
-
+        console.log("skintype compete");
 
     }
+
+    
 
     catch (error) {
         console.error(error);
