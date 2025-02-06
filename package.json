@@ -11,10 +11,9 @@
     "test": "jest --verbose",
     "seed": "node server/db/seed.js"
   },
-"prisma": {
-  "seed": "node ./server/db/seed.js"
-},
-
+  "prisma": {
+    "seed": "node ./server/db/seed.js"
+  },
   "keywords": [],
   "author": "",
   "license": "ISC",
@@ -24,6 +23,7 @@
     "bcrypt": "^5.1.1",
     "dotenv": "^16.3.1",
     "express": "^4.18.2",
+    "fresh": "^0.5.2",
     "jsonwebtoken": "^9.0.2",
     "morgan": "^1.10.0",
     "react": "^18.2.0",
