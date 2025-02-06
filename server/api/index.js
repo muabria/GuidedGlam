@@ -23,6 +23,11 @@ main()
     })
 
 
+apiRouter.get("/test", (req, res) => {
+    res.send({ message: "API is working!" });
+});
+
+
 //<--------------------------------GET ALL FACESHAPES-------------------------------->
 
 //GET /api/FaceShape
@@ -57,7 +62,7 @@ apiRouter.post("/faceshape", async (req, res, next) => {
     try {
         const { name } = req.body;
         const newFaceShape = await prisma.faceShape.create({
-            data: {name}
+            data: { name }
         });
 
         res.status(201).send(newFaceShape);
@@ -115,31 +120,47 @@ apiRouter.get("/skintone", async (req, res, next) => {
 //GET /api/skintone/:id
 apiRouter.get("/skintone/:id", async (req, res, next) => {
     try {
+        const skinToneId = Number(req.params.id); // Ensure it's a number
         const SingleSkinTone = await prisma.skinTone.findUnique({
-            where: {
-                id: Number(req.params.id)
-            },
+            where: { id: skinToneId },
         });
-
-        res.send(SingleSkinTone);
+        console.log('Fetched SkinTone:', SingleSkinTone); // Log the fetched data
+        if (!SingleSkinTone) {
+            return res.status(404).send({ error: "SkinTone not found" });
+        }
+        res.json(SingleSkinTone);
+    // res.send(SingleSkinTone);
     } catch (error) {
         next(error);
     }
 });
+
 
 
 // POST /api/skintone
 apiRouter.post("/skintone", async (req, res, next) => {
     try {
+        // Step 2: Extract data from the request body
         const { name } = req.body;
+        
+        // Step 3: Create a new SkinTone record in the database
         const newSkinTone = await prisma.skinTone.create({
-            data: {name},
+            data: { name },
         });
-        res.status(201).send(newSkinTone);
+
+        // Log the created record for debugging purposes
+        console.log('Created new SkinTone:', newSkinTone);
+
+        // Step 4: Send the created SkinTone record as JSON
+        res.status(201).send(newSkinTone); // Ensure it's JSON
+
     } catch (error) {
+        console.error('Error in POST /api/skintone:', error); // Log any errors
         next(error);
     }
 });
+
+
 
 // PUT /api/skintone/:id
 apiRouter.put("/skintone/:id", async (req, res, next) => {
@@ -147,7 +168,7 @@ apiRouter.put("/skintone/:id", async (req, res, next) => {
         const { name } = req.body;
         const updatedSkinTone = await prisma.skinTone.update({
             where: { id: Number(req.params.id) },
-            data: {name},
+            data: { name },
         });
         res.send(updatedSkinTone);
     } catch (error) {
@@ -161,7 +182,7 @@ apiRouter.patch("/skintone/:id", async (req, res, next) => {
         const { name } = req.body;
         const updatedSkinTone = await prisma.skinTone.update({
             where: { id: Number(req.params.id) },
-            data: {name},
+            data: { name },
         });
         res.send(updatedSkinTone);
     } catch (error) {
