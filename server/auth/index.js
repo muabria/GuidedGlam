@@ -29,18 +29,18 @@ authRouter.get("/users",[requireUser, requireAdmin], async (req, res, next) => {
 });
 
 //<--------------------------------GET ALL USERS FOR VALIDATING-------------------------------->
-//GET /auth/users/validate
-authRouter.get("/users/validate", async (req, res, next) => {
-    try {
-        const user = prisma.user
-        const users = await user.findMany();
+// //GET /auth/users/validate
+// authRouter.get("/users/validate", async (req, res, next) => {
+//     try {
+//         const user = prisma.user
+//         const users = await user.findMany();
 
-        delete user.password
-        res.send(users);
-    } catch (error) {
-        next(error);
-    }
-});
+//         delete user.password
+//         res.send(users);
+//     } catch (error) {
+//         next(error);
+//     }
+// });
 
 //<--------------------------------REGISTER USER-------------------------------->
 // POST /auth/register
