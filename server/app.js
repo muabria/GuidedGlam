@@ -2,6 +2,7 @@ const path = require("path");
 const express = require("express");
 const morgan = require("morgan");
 const { authMiddleware } = require("./auth/utils");
+const apiRouter = require('./api/index');
 
 const app = express();
 
@@ -24,7 +25,7 @@ app.get("/test", (req, res, next) => {
 
 // Backend routes
 app.use("/auth", require("./auth"));
-app.use("/api", require("./api"));
+app.use("/api", apiRouter);
 
 // app.get('*', (req, res, next) => {
 //     res.sendFile(path.join(__dirname, '../dist/index.html'));
@@ -52,5 +53,9 @@ app.use((error, req, res, next) => {
 //     });
 // });
 
+const PORT = process.env.PORT || 5000;
+app.listen(PORT, () => {
+    console.log(`Server is running on port ${PORT}`);
+});
 
 module.exports = app;

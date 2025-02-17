@@ -100,6 +100,9 @@ apiRouter.put("/faceshape/:id", async (req, res, next) => {
 apiRouter.patch("/faceshape/:id", async (req, res, next) => {
     try {
         const { name } = req.body;
+
+        console.log("Request Body:", req.body);
+
         const faceShape = await prisma.faceShape.findUnique({
             where: { id: Number(req.params.id) },
         });
@@ -113,11 +116,15 @@ apiRouter.patch("/faceshape/:id", async (req, res, next) => {
             data: { name },
         });
 
+        console.log("Updated FaceShape:", updatedFaceShape);
+
         res.send(updatedFaceShape);
     } catch (error) {
         next(error);
     }
 });
+
+
 
 // <------------------------ ALL SKIN TONES ------------------------>
 //GET /api/skintone
@@ -189,12 +196,15 @@ apiRouter.put("/skintone/:id", async (req, res, next) => {
 apiRouter.patch("/skintone/:id", async (req, res, next) => {
     try {
         const { name } = req.body;
+
+        console.log("Request Body:", req.body);
+
         const skinTone = await prisma.skinTone.findUnique({
             where: { id: Number(req.params.id) },
         });
 
         if (!skinTone) {
-            return res.status(404).send({ error: "FaceShape not found" });
+            return res.status(404).send({ error: "SkinTone not found" });
         }
 
         const updatedSkinTone = await prisma.skinTone.update({
@@ -202,13 +212,17 @@ apiRouter.patch("/skintone/:id", async (req, res, next) => {
             data: { name },
         });
 
+        console.log("Updated FaceShape:", updatedSkinTone);
+
         res.send(updatedSkinTone);
     } catch (error) {
         next(error);
     }
 });
 
-// <------------------------ ALL SKIN TYPES ------------------------>
+
+
+// <------------------------ ALL SKINTYPES ------------------------>
 //GET /api/skintype
 apiRouter.get("/skintype", async (req, res, next) => {
     try {
@@ -219,7 +233,7 @@ apiRouter.get("/skintype", async (req, res, next) => {
     }
 });
 
-// <------------------------ SINGLE SKIN TYPE ------------------------>
+// <------------------------ SINGLE SKINTYPE ------------------------>
 //GET /api/skintype/:id
 apiRouter.get("/skintype/:id", async (req, res, next) => {
     try {
@@ -237,6 +251,7 @@ apiRouter.get("/skintype/:id", async (req, res, next) => {
     }
 });
 
+// <------------------------ POST SKINTYPES ------------------------>
 // POST /api/skintype
 apiRouter.post("/skintype", async (req, res, next) => {
     try {
@@ -251,42 +266,96 @@ apiRouter.post("/skintype", async (req, res, next) => {
     }
 });
 
+
+// <------------------------ PUT SKINTYPES ------------------------>
 // PUT /api/skintype/:id
 apiRouter.put("/skintype/:id", async (req, res, next) => {
     try {
         const { name } = req.body;
+        const skinType = await prisma.skinType.findUnique({
+            where: { id: Number(req.params.id) },
+        });
+
+        if (!skinType) {
+            return res.status(404).send({ error: "SkinType not found" });
+        }
+
         const updatedSkinType = await prisma.skinType.update({
             where: { id: Number(req.params.id) },
             data: { name },
         });
-
-        if (!updatedSkinType) {
-            return res.status(404).send({ error: "SkinType not found" });
-        }
 
         res.send(updatedSkinType);
     } catch (error) {
         next(error);
     }
 });
+
+// <------------------------ PATCH SKINTYPES ------------------------>
 
 // PATCH /api/skintype/:id
 apiRouter.patch("/skintype/:id", async (req, res, next) => {
     try {
         const { name } = req.body;
+
+        console.log("Request Body:", req.body);
+
+        const skinType = await prisma.skinType.findUnique({
+            where: { id: Number(req.params.id) },
+        });
+
+        if (!skinType) {
+            return res.status(404).send({ error: "SkinType not found" });
+        }
+
         const updatedSkinType = await prisma.skinType.update({
             where: { id: Number(req.params.id) },
             data: { name },
         });
 
-        if (!updatedSkinType) {
-            return res.status(404).send({ error: "SkinType not found" });
-        }
+        console.log("Updated SkinType:", updatedSkinType);
 
         res.send(updatedSkinType);
     } catch (error) {
         next(error);
     }
 });
+
+
+// <------------------------ DELETE SKINTYPES ------------------------>
+// DELETE /api/skintype/:id
+
+apiRouter.delete("/skintype/:id", requireUser, async (req, res, next) => {
+    try {
+        const deletedSkinType = await prisma.skinType.delete({
+            where: { id: Number(req.params.id) },
+        });
+        res.send(deletedSkinType);
+    } catch (error) {
+        if (error.code === 'P2025') {
+            console.error("SkinType not found:", error);
+            res.status(404).send({ message: "SkinType not found" });
+        } else {
+            console.error("Error deleting SkinType:", error);
+            next(error);
+        }
+    }
+});
+
+
+// apiRouter.delete("/skintype/:id", async (req, res, next) => {
+//     try {
+//         const deletedSkinType = await prisma.skinType.delete({
+//             where: { id: Number(req.params.id) },
+//         });
+//         res.send(deletedSkinType);
+//     } catch (error) {
+//         if (error.code === 'P2025') {
+//             res.status(404).send({ message: "SkinType not found" });
+//         } else {
+//             next(error);
+//         }
+//     }
+// });
 
 module.exports = apiRouter;
