@@ -166,14 +166,18 @@ apiRouter.post("/skintone", async (req, res, next) => {
 apiRouter.put("/skintone/:id", async (req, res, next) => {
     try {
         const { name } = req.body;
+        const skinTone = await prisma.skinTone.findUnique({
+            where: { id: Number(req.params.id) },
+        });
+
+        if (!skinTone) {
+            return res.status(404).send({ error: "SkinTone not found" });
+        }
+
         const updatedSkinTone = await prisma.skinTone.update({
             where: { id: Number(req.params.id) },
             data: { name },
         });
-
-        if (!updatedSkinTone) {
-            return res.status(404).send({ error: "SkinTone not found" });
-        }
 
         res.send(updatedSkinTone);
     } catch (error) {
@@ -185,14 +189,18 @@ apiRouter.put("/skintone/:id", async (req, res, next) => {
 apiRouter.patch("/skintone/:id", async (req, res, next) => {
     try {
         const { name } = req.body;
+        const skinTone = await prisma.skinTone.findUnique({
+            where: { id: Number(req.params.id) },
+        });
+
+        if (!skinTone) {
+            return res.status(404).send({ error: "FaceShape not found" });
+        }
+
         const updatedSkinTone = await prisma.skinTone.update({
             where: { id: Number(req.params.id) },
             data: { name },
         });
-
-        if (!updatedSkinTone) {
-            return res.status(404).send({ error: "SkinTone not found" });
-        }
 
         res.send(updatedSkinTone);
     } catch (error) {
