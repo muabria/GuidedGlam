@@ -77,14 +77,18 @@ apiRouter.post("/faceshape", async (req, res, next) => {
 apiRouter.put("/faceshape/:id", async (req, res, next) => {
     try {
         const { name } = req.body;
+        const faceShape = await prisma.faceShape.findUnique({
+            where: { id: Number(req.params.id) },
+        });
+
+        if (!faceShape) {
+            return res.status(404).send({ error: "FaceShape not found" });
+        }
+
         const updatedFaceShape = await prisma.faceShape.update({
             where: { id: Number(req.params.id) },
             data: { name },
         });
-
-        if (!updatedFaceShape) {
-            return res.status(404).send({ error: "FaceShape not found" });
-        }
 
         res.send(updatedFaceShape);
     } catch (error) {
@@ -96,14 +100,18 @@ apiRouter.put("/faceshape/:id", async (req, res, next) => {
 apiRouter.patch("/faceshape/:id", async (req, res, next) => {
     try {
         const { name } = req.body;
+        const faceShape = await prisma.faceShape.findUnique({
+            where: { id: Number(req.params.id) },
+        });
+
+        if (!faceShape) {
+            return res.status(404).send({ error: "FaceShape not found" });
+        }
+
         const updatedFaceShape = await prisma.faceShape.update({
             where: { id: Number(req.params.id) },
             data: { name },
         });
-
-        if (!updatedFaceShape) {
-            return res.status(404).send({ error: "FaceShape not found" });
-        }
 
         res.send(updatedFaceShape);
     } catch (error) {
