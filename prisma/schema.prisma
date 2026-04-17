@@ -4,15 +4,14 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-  url      = env("DATABASE_URL")
 }
 
 model User {
   id       Int             @id @default(autoincrement())
   email    String          @unique
   name     String?
-  products MakeupProduct[] // Products favorited or purchased by the user (optional)
   Comment  Comment[]
+  products MakeupProduct[]
 }
 
 model MakeupProduct {
@@ -20,43 +19,43 @@ model MakeupProduct {
   name        String
   description String?
   price       Float
-  categories  Category[]
-  skinTones   SkinTone[]
-  skinTypes   SkinType[]
-  faceShapes  FaceShape[]
-  comments    Comment[]
-  User        User?       @relation(fields: [userId], references: [id])
   userId      Int?
+  User        User?       @relation(fields: [userId], references: [id])
+  categories  Category[]  @relation("CategoryToMakeupProduct")
+  comments    Comment[]   @relation("CommentToMakeupProduct")
+  faceShapes  FaceShape[] @relation("FaceShapeToMakeupProduct")
+  skinTones   SkinTone[]  @relation("MakeupProductToSkinTone")
+  skinTypes   SkinType[]  @relation("MakeupProductToSkinType")
 }
 
 model Comment {
-  id      Int             @id @default(autoincrement())
-  content String
-  products MakeupProduct[] 
-  user    User            @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId  Int
+  id       Int             @id @default(autoincrement())
+  content  String
+  userId   Int
+  user     User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+  products MakeupProduct[] @relation("CommentToMakeupProduct")
 }
 
 model Category {
   id       Int             @id @default(autoincrement())
   name     String          @unique
-  products MakeupProduct[] 
+  products MakeupProduct[] @relation("CategoryToMakeupProduct")
 }
 
 model SkinTone {
   id       Int             @id @default(autoincrement())
   name     String          @unique
-  products MakeupProduct[] 
+  products MakeupProduct[] @relation("MakeupProductToSkinTone")
 }
 
 model SkinType {
   id       Int             @id @default(autoincrement())
   name     String          @unique
-  products MakeupProduct[] 
+  products MakeupProduct[] @relation("MakeupProductToSkinType")
 }
 
 model FaceShape {
   id       Int             @id @default(autoincrement())
   name     String          @unique
-  products MakeupProduct[] 
+  products MakeupProduct[] @relation("FaceShapeToMakeupProduct")
 }
