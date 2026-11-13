@@ -23,12 +23,13 @@ SKIN_TONES = [
     'Dark', 
     'Dark Deep', 
     'Deep',
-]
+    ]
 SKIN_TYPES = [
     'Dry', 
     'Combo', 
     'Oily', 
-    'Sensitive']
+    'Sensitive'
+    ]
 
 
 class Command(BaseCommand):
@@ -40,4 +41,3 @@ class Command(BaseCommand):
                 model.objects.get_or_create(name=name)
             self.stdout.write(f'{model.__name__}: {model.objects.count()} rows')
         self.stdout.write(self.style.SUCCESS('Seeded database!'))
-        
