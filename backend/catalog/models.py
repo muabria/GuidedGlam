@@ -15,10 +15,17 @@ class NamedTag(models.Model):
         return self.name
 
 
+# ---- What kind of product is it? -------------------------------------------
+
 class Category(NamedTag):
+    """Product type: Foundation, Concealer, Blush, ..."""
+
     class Meta(NamedTag.Meta):
         verbose_name_plural = 'categories'
 
+
+# ---- Who is it for? (personal attributes) ----------------------------------
+# The first three are the questions every user answers at sign-up.
 
 class SkinTone(NamedTag):
     pass
@@ -31,6 +38,43 @@ class SkinType(NamedTag):
 class FaceShape(NamedTag):
     pass
 
+
+class Undertone(NamedTag):
+    """Warm, Cool, Neutral... and the jewelry metals that suit it."""
+
+    jewelry = models.CharField(max_length=200, blank=True, help_text='e.g. "Gold, rose gold"')
+
+
+class ColorSeason(NamedTag):
+    """Spring, Summer, Autumn, Winter. Its colors live in PaletteColor."""
+
+
+class PaletteColor(models.Model):
+    """One recommended color for a season, e.g. Autumn / Blush / Terracotta."""
+
+    class Use(models.TextChoices):
+        CLOTHING = 'clothing', 'Clothing'
+        BLUSH = 'blush', 'Blush'
+        CONTOUR = 'contour', 'Contour'
+        EYESHADOW = 'eyeshadow', 'Eyeshadow'
+        JEWELRY = 'jewelry', 'Jewelry'
+
+    season = models.ForeignKey(ColorSeason, on_delete=models.CASCADE, related_name='palette')
+    use = models.CharField(max_length=20, choices=Use.choices)
+    name = models.CharField(max_length=100)
+    hex = models.CharField(max_length=7, blank=True, help_text='Optional color code, e.g. #B7410E')
+
+    class Meta:
+        ordering = ['season_id', 'use', 'id']
+        constraints = [
+            models.UniqueConstraint(fields=['season', 'use', 'name'], name='unique_color_per_season_use'),
+        ]
+
+    def __str__(self):
+        return f'{self.season} / {self.get_use_display()} / {self.name}'
+
+
+# ---- Products ---------------------------------------------------------------
 
 class MakeupProduct(models.Model):
     name = models.CharField(max_length=200)
@@ -47,19 +91,11 @@ class MakeupProduct(models.Model):
     face_shapes = models.ManyToManyField(FaceShape, blank=True, related_name='products')
     skin_tones = models.ManyToManyField(SkinTone, blank=True, related_name='products')
     skin_types = models.ManyToManyField(SkinType, blank=True, related_name='products')
+    undertones = models.ManyToManyField(Undertone, blank=True, related_name='products')
+    color_seasons = models.ManyToManyField(ColorSeason, blank=True, related_name='products')
+
+    class Meta:
+        ordering = ['name']
 
     def __str__(self):
         return self.name
-
-
-class Comment(models.Model):
-    content = models.TextField()
-    user = models.ForeignKey(
-        settings.AUTH_USER_MODEL,
-        on_delete=models.CASCADE,
-        related_name='comments',
-    )
-    products = models.ManyToManyField(MakeupProduct, blank=True, related_name='comments')
-
-    def __str__(self):
-        return self.content[:50]

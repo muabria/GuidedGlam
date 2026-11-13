@@ -37,6 +37,8 @@ python manage.py migrate
 | `accounts/` | Users: register, login, account, admin-only routes |
 | `catalog/models.py` | Makeup products, comments, categories, skin tones, skin types, face shapes |
 | `catalog/views.py` | The `/api/...` routes |
+| `catalog/management/commands/seed.py` | Starter lists: tags, product types, undertones, season color guides |
+| `social/` | Posts, photos, likes, saves, comments (`/api/post...`) |
 | `catalog/admin.py` | What shows up in the admin panel |
 
 It uses a local SQLite file by default. To use Postgres, copy `.env.example` to `.env` and set `DATABASE_URL`.

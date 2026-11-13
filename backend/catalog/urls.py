@@ -8,6 +8,10 @@ router = SimpleRouter(trailing_slash=False)
 router.register('faceshape', views.FaceShapeViewSet)
 router.register('skintone', views.SkinToneViewSet)
 router.register('skintype', views.SkinTypeViewSet)
+router.register('undertone', views.UndertoneViewSet)
+router.register('colorseason', views.ColorSeasonViewSet)
+router.register('category', views.CategoryViewSet)
+router.register('product', views.ProductViewSet, basename='product')
 
 urlpatterns = [
     path('test', views.test),

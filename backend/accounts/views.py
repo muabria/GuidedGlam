@@ -7,7 +7,9 @@ from rest_framework.response import Response
 from rest_framework_simplejwt.tokens import AccessToken
 
 from .models import User
-from .serializers import EditAccountSerializer, RegisterSerializer, UserSerializer
+from .serializers import (
+    EditAccountSerializer, PublicUserSerializer, RegisterSerializer, UserSerializer,
+)
 
 
 def token_for(user):
@@ -15,6 +17,8 @@ def token_for(user):
 
 
 # POST /auth/register
+# body: username, email, password, skinTone, skinType, faceShape (ids)
+#       and optionally undertone, colorSeason
 @api_view(['POST'])
 def register(request):
     serializer = RegisterSerializer(data=request.data)
@@ -40,7 +44,7 @@ def login(request):
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def account(request):
-    return Response(UserSerializer(request.user).data)
+    return Response(UserSerializer(request.user, context={'request': request}).data)
 
 
 # PATCH /auth/account/<id>/edit  (always edits the logged-in user's own account)
@@ -53,11 +57,33 @@ def edit_account(request, pk):
     return Response('User successfully updated')
 
 
+# GET /auth/profile/<username>  (anyone can look)
+@api_view(['GET'])
+def profile(request, username):
+    user = get_object_or_404(User, username=username)
+    return Response(PublicUserSerializer(user, context={'request': request}).data)
+
+
+# POST /auth/profile/<username>/follow    -> follow
+# DELETE /auth/profile/<username>/follow  -> unfollow
+@api_view(['POST', 'DELETE'])
+@permission_classes([IsAuthenticated])
+def follow(request, username):
+    user = get_object_or_404(User, username=username)
+    if user == request.user:
+        return Response("You can't follow yourself.", status=status.HTTP_400_BAD_REQUEST)
+    if request.method == 'POST':
+        request.user.following.add(user)
+    else:
+        request.user.following.remove(user)
+    return Response(PublicUserSerializer(user, context={'request': request}).data)
+
+
 # GET /auth/users  (admin only)
 @api_view(['GET'])
 @permission_classes([IsAdminUser])
 def users(request):
-    return Response(UserSerializer(User.objects.all(), many=True).data)
+    return Response(UserSerializer(User.objects.all(), many=True, context={'request': request}).data)
 
 
 # DELETE /auth/user/<id>  (admin only)
@@ -78,4 +104,4 @@ def set_admin(request, pk):
     user = get_object_or_404(User, pk=pk)
     user.is_staff = is_admin
     user.save(update_fields=['is_staff'])
-    return Response(UserSerializer(user).data)
+    return Response(UserSerializer(user, context={'request': request}).data)
