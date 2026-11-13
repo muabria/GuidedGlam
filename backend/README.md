@@ -18,7 +18,7 @@ python manage.py createsuperuser  # your admin login
 
 ```
 python manage.py runserver        # API on http://localhost:8000
-npm run client:dev                # (from the project root) React on http://localhost:5173
+npm run dev                       # (from the project root) React on http://localhost:5173
 python manage.py test             # run the tests
 ```
 

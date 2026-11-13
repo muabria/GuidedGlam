@@ -2,12 +2,33 @@ from django.core.management.base import BaseCommand
 
 from catalog.models import FaceShape, SkinTone, SkinType
 
-FACE_SHAPES = ['Diamond', 'Heart', 'Round', 'Oval', 'Square', 'Triangle']
+FACE_SHAPES = [
+    'Diamond', 
+    'Heart', 
+    'Round', 
+    'Oval', 
+    'Square', 
+    'Triangle'
+    ]
+
 SKIN_TONES = [
-    'Fair', 'Fair Light', 'Light', 'Light Medium', 'Medium', 'Medium Tan',
-    'Tan', 'Tan Dark', 'Dark', 'Dark Deep', 'Deep',
+    'Fair', 
+    'Fair Light', 
+    'Light', 
+    'Light Medium', 
+    'Medium', 
+    'Medium Tan',
+    'Tan', 
+    'Tan Dark', 
+    'Dark', 
+    'Dark Deep', 
+    'Deep',
 ]
-SKIN_TYPES = ['Dry', 'Combo', 'Oily', 'Sensitive']
+SKIN_TYPES = [
+    'Dry', 
+    'Combo', 
+    'Oily', 
+    'Sensitive']
 
 
 class Command(BaseCommand):
@@ -19,3 +40,4 @@ class Command(BaseCommand):
                 model.objects.get_or_create(name=name)
             self.stdout.write(f'{model.__name__}: {model.objects.count()} rows')
         self.stdout.write(self.style.SUCCESS('Seeded database!'))
+        
